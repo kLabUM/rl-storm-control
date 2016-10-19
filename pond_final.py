@@ -59,13 +59,15 @@ r.set_initial_value(h0,t0)
 dt=1;y=[];k=0
 
 p = pond(100,0)
-
+qo=[]
 while k < 1000:
     k=k+1
     qin=0.1
     state = state2reality(p.volume)
-    percent_opening = np.amax(Q[int(state),])
-    qout=p.qout(percent_opening)
+    percent_opening = np.argmax(Q[int(state),])
+    print percent_opening
+    qout=p.qout(percent_opening/10)
+    qo.append(qout)
     r.set_f_params(qin,qout)
     r.integrate(r.t + dt)
     x=r.y
