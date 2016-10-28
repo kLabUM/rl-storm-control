@@ -29,12 +29,15 @@ def state2reality(pond_class):
 
 # Action function
 
-def epsi_greedy(matrix, state_system, iterator):
+def epsi_greedy(matrix, state_system, iterator,episode):
     """Action Choice Based on Greedy Search"""
-    if iterator > 6000:
-        epsi = 0.0
+    if episode < 50:
+        if iterator > 5000:
+            epsi = 0.0
+        else:
+            epsi = 0.6
     else:
-        epsi = 0.3
+        epsi = 0.0
     if np.random.rand() < epsi:
         action_system = np.random.randint(0,10)
     else:
@@ -44,7 +47,7 @@ def epsi_greedy(matrix, state_system, iterator):
 ##--------------- IMPLEMENTATION -----------###
 
 q_martix = np.zeros(shape=(11, 11))
-test_pond = pond(1000.0,2.0)
+test_pond = pond(100.0,2.0)
 test_pond.timestep = 1
 
 volume = []
@@ -55,7 +58,7 @@ time = []
 #plt.ion()
 
 
-EPISODES = 10
+EPISODES = 100
 for i in range(0, EPISODES):
     # Initialize new episode
     state = 0
@@ -64,18 +67,18 @@ for i in range(0, EPISODES):
     test_pond.volume = 0
 
     j = 0   # Iterator to break infinite loop in episode
-    while  j < 10000:#test_pond.overflow == 0:
+    while test_pond.overflow == 0:
         # LOOP BREAKER #
         j = j + 1
         if j > 10000:
             break
 
         # ------ INFLOW ----- #
-        qin = 10*np.random.uniform(0,1)
+        qin = 2.0*np.random.uniform(0,1)
 
         # Q - Learning #
         # 1. Chooses action
-        action = epsi_greedy(q_martix, state, j)
+        action = epsi_greedy(q_martix, state, j,i)
         # 2. Implements Action
         qout = test_pond.qout(action)
         test_pond.dhdt(qin, qout)
@@ -88,7 +91,7 @@ for i in range(0, EPISODES):
         # 5. Update the Q matrix
         q_martix[state, action] = q_martix[state, action]+1.0*(r+0.6*np.amax(q_martix[state_n,]))
         # 5.1 Normalize the Q matrix based on Norm
-        if np.linalg.norm(q_martix) > 0.0:
+        if np.linalg.norm(q_martix) > 10.0:
             q_martix = q_martix/np.linalg.norm(q_martix)
         else:
             q_martix = q_martix

@@ -15,8 +15,8 @@ def reward(height_in_pond, valve_position):
     area = 1
     c_discharge = 1
     discharge = np.sqrt(2 * 9.81 * height_in_pond) * valve_position * area * c_discharge
-    if height_in_pond >= 0.8 and height_in_pond <= 0.85:
-        if  discharge > 0 and discharge < 2:
+    if height_in_pond >= 0.8 and height_in_pond <= 0.9:
+        if  discharge > 0 and discharge < 100:
             return 10.0
         else:
             return 0.0
