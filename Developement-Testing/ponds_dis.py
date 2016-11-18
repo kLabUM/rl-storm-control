@@ -20,14 +20,13 @@ style.use('ggplot')
 def state2reality(pond_class, Q_matrix):
     """Discrete Ponds"""
     height_discrete_value = Q_matrix.shape
-    index_discrete = pond_class.max_height/(height_discrete_value[0]-1)
+    index_discrete = pond_class.max_height/(height_discrete_value[0]-2)
     height = pond_class.height/index_discrete
     height = int(np.floor(height))
     return height
 
 
 # Action function
-
 def epsi_greedy(matrix, epsi, state_system):
     """Action Choice Based on Greedy Search"""
     epsilon = epsi
@@ -37,20 +36,22 @@ def epsi_greedy(matrix, epsi, state_system):
         action_system = np.argmax(matrix[state_system, ])
     return action_system/10.0
 
+
+
 # #--------------- IMPLEMENTATION -----------###
 
-q_martix = np.zeros(shape=(101, 12))
-test_pond = pond(100.0, 2.0)
+q_martix = np.zeros(shape=(21, 11))
+test_pond = pond(100.0, 2.0, 0.0)
 test_pond.timestep = 1
 
 volume = []
 flow = []
 reward = []
-re = []
+act = []
 # ----------- Dynamic Plot ----------- #
 
 
-EPISODES = 200
+EPISODES = 100
 for i in range(0, EPISODES):
     # Initialize new episode
     state = 0
@@ -60,7 +61,9 @@ for i in range(0, EPISODES):
     epsi = 0.7
     j = 0   # Iterator to break infinite loop in episode
     volume = []
+    flow = []
     reward = []
+    act = []
     while test_pond.overflow == 0:
         # LOOP BREAKER #
         j = j + 1
@@ -79,22 +82,34 @@ for i in range(0, EPISODES):
         reward.append(r)
         # 4. Identify the state and action in terms of Q matrix
         state_n = state2reality(test_pond, q_martix)
+        action = np.around(action, decimals=1)
         action = int(np.floor(action*10))
+        act.append(action)
+        #print (action)
         # 5. Update the Q matrix
-        q_martix[state, action] = q_martix[state, action]+0.05*(r + 0.6*np.max(q_martix[state_n, ])-q_martix[state, action])
+        #print (action)
+        #print (state)
+        q_martix[state, action] = q_martix[state, action]+0.05*(r + 0.5*np.max(q_martix[state_n, ]) - q_martix[state, action])
         # 6. Update the state
         state = state_n
         # 7. Record the changes in the behavior
-        #flow.append(qout)
-        #volume.append(test_pond.height)
-    re.append(np.mean(reward))
+        flow.append(qout)
+        volume.append(test_pond.height)
 
-plt.figure()
-plt.plot(re)
+print (q_martix)
 
-plt.figure()
-plt.imshow(q_martix)
-plt.axes().set_aspect('auto')
-plt.colorbar()
+plt.subplot(221)
+plt.hist(flow)
+plt.xlabel("Time Steps")
+plt.ylabel("Flow-Discharge")
+plt.subplot(222)
+plt.hist(volume)
+plt.xlabel("Time Steps")
+plt.ylabel("Height Pond")
+plt.subplot(223)
+plt.hist(reward)
+plt.ylabel("Reward")
+plt.subplot(224)
+plt.hist(act)
+plt.ylabel("action")
 plt.show()
-

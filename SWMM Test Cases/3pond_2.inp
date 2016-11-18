@@ -1,0 +1,181 @@
+[TITLE]
+;;Project Title/Notes
+
+[OPTIONS]
+;;Option             Value
+FLOW_UNITS           CFS
+INFILTRATION         MODIFIED_GREEN_AMPT
+FLOW_ROUTING         DYNWAVE
+LINK_OFFSETS         DEPTH
+MIN_SLOPE            0
+ALLOW_PONDING        NO
+SKIP_STEADY_STATE    NO
+
+START_DATE           08/12/2016
+START_TIME           00:00:00
+REPORT_START_DATE    08/12/2016
+REPORT_START_TIME    00:00:00
+END_DATE             08/12/2016
+END_TIME             06:00:00
+SWEEP_START          01/01
+SWEEP_END            12/31
+DRY_DAYS             0
+REPORT_STEP          00:15:00
+WET_STEP             00:05:00
+DRY_STEP             01:00:00
+ROUTING_STEP         0:00:30 
+
+INERTIAL_DAMPING     PARTIAL
+NORMAL_FLOW_LIMITED  BOTH
+FORCE_MAIN_EQUATION  H-W
+VARIABLE_STEP        0.75
+LENGTHENING_STEP     0
+MIN_SURFAREA         12.557
+MAX_TRIALS           8
+HEAD_TOLERANCE       0.005
+SYS_FLOW_TOL         5
+LAT_FLOW_TOL         5
+MINIMUM_STEP         0.5
+THREADS              1
+
+[EVAPORATION]
+;;Data Source    Parameters
+;;-------------- ----------------
+CONSTANT         0.0
+DRY_ONLY         NO
+
+[RAINGAGES]
+;;Name           Format    Interval SCF      Source    
+;;-------------- --------- ------ ------ ----------
+Gage1            INTENSITY 1:00     1.0      TIMESERIES t1              
+
+[SUBCATCHMENTS]
+;;Name           Rain Gage        Outlet           Area     %Imperv  Width    %Slope   CurbLen  SnowPack        
+;;-------------- ---------------- ---------------- -------- -------- -------- -------- -------- ----------------
+SC2              Gage1            J2               4444     100      400      0.5      0                        
+
+[SUBAREAS]
+;;Subcatchment   N-Imperv   N-Perv     S-Imperv   S-Perv     PctZero    RouteTo    PctRouted 
+;;-------------- ---------- ---------- ---------- ---------- ---------- ---------- ----------
+SC2              0.01       0.1        0.05       0.05       25         OUTLET    
+
+[INFILTRATION]
+;;Subcatchment   Suction    Ksat       IMD       
+;;-------------- ---------- ---------- ----------
+SC2              3.5        0.5        0.25      
+
+[JUNCTIONS]
+;;Name           Elevation  MaxDepth   InitDepth  SurDepth   Aponded   
+;;-------------- ---------- ---------- ---------- ---------- ----------
+J2               101        0          0          0          0         
+J5               90         0          0          0          0         
+J7               85         0          0          0          0         
+
+[OUTFALLS]
+;;Name           Elevation  Type       Stage Data       Gated    Route To        
+;;-------------- ---------- ---------- ---------------- -------- ----------------
+Out1             75         FREE                        NO                       
+
+[STORAGE]
+;;Name           Elev.    MaxDepth   InitDepth  Shape      Curve Name/Params            N/A      Fevap    Psi      Ksat     IMD     
+;;-------------- -------- ---------- ----------- ---------- ---------------------------- -------- --------          -------- --------
+S5               95       12         0          TABULAR    Storage1                     0        0       
+S7               80       12         0          TABULAR    Storage1                     0        0       
+
+[CONDUITS]
+;;Name           From Node        To Node          Length     Roughness  InOffset   OutOffset  InitFlow   MaxFlow   
+;;-------------- ---------------- ---------------- ---------- ---------- ---------- ---------- ---------- ----------
+C2               J2               S5               400        0.01       0          0          0          0         
+C6               J5               J7               400        0.01       0          0          0          0         
+C7               J7               S7               400        0.01       0          0          0          0         
+
+[ORIFICES]
+;;Name           From Node        To Node          Type         Offset     Qcoeff     Gated    CloseTime 
+;;-------------- ---------------- ---------------- ------------ ---------- ---------- -------- ----------
+R2               S5               J5               BOTTOM       0          0.65       NO       0         
+C8               S7               Out1             BOTTOM       0          0.65       NO       0         
+
+[XSECTIONS]
+;;Link           Shape        Geom1            Geom2      Geom3      Geom4      Barrels    Culvert   
+;;-------------- ------------ ---------------- ---------- ---------- ---------- ---------- ----------
+C2               CIRCULAR     1                0          0          0          1                    
+C6               CIRCULAR     1                0          0          0          1                    
+C7               CIRCULAR     1                0          0          0          1                    
+R2               RECT_CLOSED  1                1          0          0
+C8               RECT_CLOSED  1                1          0          0
+
+[CURVES]
+;;Name           Type       X-Value    Y-Value   
+;;-------------- ---------- ---------- ----------
+Storage1         Storage    0          10000     
+Storage1                    1          10000     
+Storage1                    2          10000     
+Storage1                    3          10000     
+Storage1                    4          10000     
+Storage1                    5          10000     
+Storage1                    6          10000     
+Storage1                    7          10000     
+Storage1                    8          10000     
+Storage1                    9          10000     
+Storage1                    10         10000     
+Storage1                    11         10000     
+Storage1                    12         10000     
+
+[TIMESERIES]
+;;Name           Date       Time       Value     
+;;-------------- ---------- ---------- ----------
+t1                          0          0         
+t1                          1          5         
+t1                          2          6         
+t1                          3          7         
+t1                          4          10        
+t1                          5          12        
+t1                          6          14        
+t1                          7          12        
+t1                          8          11        
+t1                          9          10        
+t1                          10         9         
+t1                          11         8         
+t1                          12         0         
+
+[REPORT]
+;;Reporting Options
+INPUT      NO
+CONTROLS   NO
+SUBCATCHMENTS ALL
+NODES ALL
+LINKS ALL
+
+[TAGS]
+
+[MAP]
+DIMENSIONS 0.000 0.000 10000.000 10000.000
+Units      None
+
+[COORDINATES]
+;;Node           X-Coord            Y-Coord           
+;;-------------- ------------------ ------------------
+J2               6320.293           6039.120          
+J5               6589.242           4026.080          
+J7               6352.893           3056.235          
+Out1             6035.045           1629.992          
+S5               6483.293           5232.274          
+S7               6238.794           2412.388          
+
+[VERTICES]
+;;Link           X-Coord            Y-Coord           
+;;-------------- ------------------ ------------------
+
+[Polygons]
+;;Subcatchment   X-Coord            Y-Coord           
+;;-------------- ------------------ ------------------
+SC2              3907.905           6740.016          
+SC2              7656.887           6740.016          
+SC2              7819.886           9030.155          
+SC2              4462.103           9136.104          
+
+[SYMBOLS]
+;;Gage           X-Coord            Y-Coord           
+;;-------------- ------------------ ------------------
+Gage1            5187.449           9649.552          
+
