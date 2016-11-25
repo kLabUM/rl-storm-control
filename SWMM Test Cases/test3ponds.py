@@ -3,17 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def open2discrete(opening):
-    """Discrete Ponds"""
-    index_discrete = 0.01
-    opening = float(opening)/index_discrete
-    opening = int(np.floor(opening))
-    return opening
-
-
 def height2discrete(height):
     """Discrete Ponds"""
-    index_discrete = 0.025
+    index_discrete = 0.1
     height = float(height)/index_discrete
     height = int(np.floor(height))
     return height
@@ -22,11 +14,9 @@ def epsi_greedy(matrix, epsilon, state):
     """Action Value Function"""
     if np.random.rand() < epsilon:
         action = np.random.randint(0,10)
-        action = action/10.0
     else:
         action = np.argmax(matrix[state, ])
-        action = action * 0.01
-    return action # Percent opening
+    return action/10.0 # Percent opening
 
 #def reward(flow):
 #    """Flow from the outlet"""
@@ -38,25 +28,23 @@ def epsi_greedy(matrix, epsilon, state):
 
 def reward(height, outflow):
     """Reward Function"""
-    if height >= 2.90 and height <= 2.950:
+    if height >= 3.90 and height <= 4.00:
         if outflow > 0 and outflow <= 100:
-            return 100.0
+            return 10.0
         else:
             return 0.0
-    elif height >= 2.950 and height < 4.00:
-        return -10.0 #(height-3.950)*100.0*(1/0.70)
-    elif height >= 4.00:
-        return -100.0
-    elif height < 2.90:
-        return (2.90-height)*(1/2.90)*100.0
+    elif height < 3.90:
+        return 0.0
+    elif height > 4.8:
+        return -1.00
     else:
         return 0.0
 
-Q_matrix = np.zeros(shape=(200,101))
+Q_matrix = np.loadtxt("Q_matrix.txt")#np.zeros(shape=(51, 11))
 
-ALPHA = 0.006
+ALPHA = 0.1
 GAMMA = 0.6
-EPISODES = 2
+EPISODES = 1
 
 flow = []
 rewq=[]
@@ -72,15 +60,15 @@ for i in range(0, EPISODES):
     volume= []
     dep =[]
     epsi = 0.6
-    while t < 4000 :
+    while t < 6000 :
         # 1. Choose a action
         height = swmm.get('S3', swmm.DEPTH, swmm.SI)
         height = height2discrete(height)
         state = height
-        epsi = 0.99*epsi
-        act = epsi_greedy(Q_matrix, epsi, height)
+        epsi = 0.0*epsi
+        action = epsi_greedy(Q_matrix, epsi, height)
         # 2. Implement Action
-        swmm.modify_setting('R1', act)
+        swmm.modify_setting('R1', action)
         swmm.run_step() # Run SWMM Time step
         # 3. Receive Reward
         height = swmm.get('S3', swmm.DEPTH, swmm.SI)
@@ -89,7 +77,7 @@ for i in range(0, EPISODES):
         rew.append(r)
         # 4. Q-Matrix Update
         state_n =  swmm.get('S3', swmm.DEPTH, swmm.SI)
-        action = open2discrete(act)
+        action = int(action*10)
         Q_matrix[state, action] = Q_matrix[state,action] + ALPHA * (r + GAMMA*np.max(Q_matrix[state_n, ])-Q_matrix[state, action])
         state = state_n
         volume.append(swmm.get('C1', swmm.FLOW, swmm.SI))
@@ -100,7 +88,7 @@ for i in range(0, EPISODES):
     rewq.append(np.mean(rew))
     flow.append(np.mean(volume))
     depth.append(np.mean(dep))
-np.savetxt("Q_matrix.txt", Q_matrix)
+#np.savetxt("Q_matrix.txt", Q_matrix)
 
 
 plt.figure(1)
