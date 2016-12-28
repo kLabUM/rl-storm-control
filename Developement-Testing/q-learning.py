@@ -56,7 +56,7 @@ for i in range(0, EPISODES):
     state = 0
     test_pond.volume = 0
     test_pond.overflow = 0
-    test_pond.volume = 0
+
     epsi = 0.7
     j = 0   # Iterator to break infinite loop in episode
     volume = []
