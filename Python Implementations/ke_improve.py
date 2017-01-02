@@ -19,7 +19,10 @@ model.add(Activation('relu'))
 obmodel.add(Dense(2))
 model.add(Activation('softmax'))
 
-sgd = SGD(lr=0.001, decay=1e-6, momentum=0.9, nesterov=True)
+sgd = SGsnapshot(snaps, observation, 10)
+
+
+env.monitoD(lr=0.001, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='mse', optimizer=sgd)
 
 EPISODES = 5
