@@ -1,0 +1,778 @@
+[TITLE]
+
+
+[OPTIONS]
+;;Options           	Value
+;;------------------	------------
+FLOW_UNITS          	CFS
+INFILTRATION        	HORTON
+FLOW_ROUTING        	KINWAVE
+START_DATE          	08/12/2016
+START_TIME          	00:00:00
+REPORT_START_DATE   	08/12/2016
+REPORT_START_TIME   	00:00:00
+END_DATE            	08/13/2016
+END_TIME            	10:00:00
+SWEEP_START         	01/01
+SWEEP_END           	12/31
+DRY_DAYS            	0
+REPORT_STEP         	00:01:00
+WET_STEP            	00:01:00
+DRY_STEP            	00:01:00
+ROUTING_STEP        	00:01:00
+ALLOW_PONDING       	NO
+INERTIAL_DAMPING    	PARTIAL
+VARIABLE_STEP       	0.75
+LENGTHENING_STEP    	0
+MIN_SURFAREA        	1.14
+NORMAL_FLOW_LIMITED 	BOTH
+SKIP_STEADY_STATE   	NO
+FORCE_MAIN_EQUATION 	H-W
+LINK_OFFSETS        	DEPTH
+MIN_SLOPE           	0
+MAX_TRIALS          	8
+HEAD_TOLERANCE      	0.0015
+SYS_FLOW_TOL        	5
+LAT_FLOW_TOL        	5
+MINIMUM_STEP        	0.5
+THREADS             	1
+
+[EVAPORATION]
+;;Type         	Parameters
+;;-------------	----------
+CONSTANT    	0.0
+DRY_ONLY     NO
+
+[RAINGAGES]
+;;                 	Rain     	Time  	Snow  	Data      
+;;Name             	Type     	Intrvl	Catch 	Source    
+;;-----------------	---------	------	------	----------
+Gage1              	INTENSITY	1:00  	1.0   	TIMESERIES	TS1             
+SCS_24h_Type_II_1in	INTENSITY	0:05  	1.0   	TIMESERIES	SCS_24h_Type_II_1in
+SCS_24h_Type_II_2in	INTENSITY	0:05  	1.0   	TIMESERIES	SCS_24h_Type_II_2in
+
+[SUBCATCHMENTS]
+;;              	                	                	Total   	Pcnt.   	        	Pcnt.   	Curb    	Snow    
+;;Name          	Raingage        	Outlet          	Area    	Imperv  	Width   	Slope   	Length  	Pack    
+;;--------------	----------------	----------------	--------	--------	--------	--------	--------	--------
+SC1             	SCS_24h_Type_II_1in	S1              	100     	100     	2500    	0.5     	0       	                
+SC2             	SCS_24h_Type_II_1in	S2              	100     	100     	2500    	0.5     	0       	                
+
+[SUBAREAS]
+;;Subcatchment  	N-Imperv  	N-Perv    	S-Imperv  	S-Perv    	PctZero   	RouteTo   	PctRouted 
+;;--------------	----------	----------	----------	----------	----------	----------	----------
+SC1             	0.01      	0.1       	0.05      	0.05      	25        	OUTLET    
+SC2             	0.01      	0.1       	0.05      	0.05      	25        	OUTLET    
+
+[INFILTRATION]
+;;Subcatchment  	MaxRate   	MinRate   	Decay     	DryTime   	MaxInfil  
+;;--------------	----------	----------	----------	----------	----------
+SC1             	3.5       	0.5       	0.25      	7         	0         
+SC2             	3.5       	0.5       	0.25      	7         	0         
+
+[JUNCTIONS]
+;;              	Invert    	Max.      	Init.     	Surcharge 	Ponded    
+;;Name          	Elev.     	Depth     	Depth     	Depth     	Area      
+;;--------------	----------	----------	----------	----------	----------
+J1              	90        	0         	0         	0         	0         
+J2              	90        	0         	0         	0         	0         
+J3              	85        	0         	0         	0         	0         
+
+[OUTFALLS]
+;;              	Invert    	Outfall     	Stage/Table     	Tide
+;;Name          	Elev.     	Type        	Time Series     	Gate	Route To        
+;;--------------	----------	------------	----------------	----	----------------
+Out1            	80        	FREE        	                	NO  	                
+
+[STORAGE]
+;;              	Invert  	Max.    	Init.   	Storage   	Curve   	        	        	Ponded  	Evap.   
+;;Name          	Elev.   	Depth   	Depth   	Curve     	Params  	        	        	Area    	Frac.   	Infiltration parameters
+;;--------------	--------	--------	--------	----------	--------	--------	--------	--------	--------	-----------------------
+S1              	95      	12      	0       	FUNCTIONAL	50000   	0       	0       	0       	0       
+S2              	95      	12      	0       	FUNCTIONAL	50000   	0       	0       	0       	0       
+S3              	80      	12      	0       	FUNCTIONAL	50000   	0       	0       	0       	0       
+
+[CONDUITS]
+;;              	Inlet           	Outlet          	          	Manning   	Inlet     	Outlet    	Init.     	Max.      
+;;Name          	Node            	Node            	Length    	N         	Offset    	Offset    	Flow      	Flow      
+;;--------------	----------------	----------------	----------	----------	----------	----------	----------	----------
+C1              	J1              	J3              	500       	0.01      	0         	0         	0         	0         
+C2              	J2              	J3              	500       	0.01      	0         	0         	0         	0         
+C3              	J3              	S3              	500       	0.01      	0         	0         	0         	0         
+
+[ORIFICES]
+;;              	Inlet           	Outlet          	Orifice     	Crest     	Disch.    	Flap	Open/Close
+;;Name          	Node            	Node            	Type        	Height    	Coeff.    	Gate	Time      
+;;--------------	----------------	----------------	------------	----------	----------	----	----------
+OR1             	S1              	J1              	BOTTOM      	0         	0.65      	NO  	0         
+OR2             	S2              	J2              	BOTTOM      	0         	0.65      	NO  	0         
+R3              	S3              	Out1            	BOTTOM      	0         	0.65      	NO  	0         
+
+[XSECTIONS]
+;;Link          	Shape       	Geom1           	Geom2     	Geom3     	Geom4     	Barrels   
+;;--------------	------------	----------------	----------	----------	----------	----------
+C1              	RECT_OPEN   	2               	2         	0         	0         	1         	          
+C2              	RECT_OPEN   	2               	2         	0         	0         	1         	          
+C3              	RECT_OPEN   	2               	2         	0         	0         	1         	          
+OR1             	RECT_CLOSED 	1               	1         	0         	0
+OR2             	RECT_CLOSED 	1               	1         	0         	0
+R3              	RECT_CLOSED 	1               	1         	0         	0
+
+[LOSSES]
+;;Link          	Inlet     	Outlet    	Average   	Flap Gate 	SeepageRate
+;;--------------	----------	----------	----------	----------	----------
+
+[CURVES]
+;;Name          	Type      	X-Value   	Y-Value   
+;;--------------	----------	----------	----------
+s11             	Storage   	0         	100       
+s11             	          	1         	100       
+s11             	          	2         	100       
+s11             	          	3         	100       
+s11             	          	4         	100       
+s11             	          	5         	100       
+
+[TIMESERIES]
+;;Name          	Date      	Time      	Value     
+;;--------------	----------	----------	----------
+;SCS_24h_Type_II_1in design storm, total rainfall = 1 in, rain interval = 5 minutes, rain units = in/hr.
+SCS_24h_Type_II_1in	          	0:00      	0.0096    
+SCS_24h_Type_II_1in	          	0:05      	0.0108    
+SCS_24h_Type_II_1in	          	0:10      	0.0096    
+SCS_24h_Type_II_1in	          	0:15      	0.0108    
+SCS_24h_Type_II_1in	          	0:20      	0.0108    
+SCS_24h_Type_II_1in	          	0:25      	0.0096    
+SCS_24h_Type_II_1in	          	0:30      	0.0108    
+SCS_24h_Type_II_1in	          	0:35      	0.0108    
+SCS_24h_Type_II_1in	          	0:40      	0.0108    
+SCS_24h_Type_II_1in	          	0:45      	0.0108    
+SCS_24h_Type_II_1in	          	0:50      	0.0108    
+SCS_24h_Type_II_1in	          	0:55      	0.0108    
+SCS_24h_Type_II_1in	          	1:00      	0.0108    
+SCS_24h_Type_II_1in	          	1:05      	0.012     
+SCS_24h_Type_II_1in	          	1:10      	0.0108    
+SCS_24h_Type_II_1in	          	1:15      	0.0108    
+SCS_24h_Type_II_1in	          	1:20      	0.012     
+SCS_24h_Type_II_1in	          	1:25      	0.0108    
+SCS_24h_Type_II_1in	          	1:30      	0.012     
+SCS_24h_Type_II_1in	          	1:35      	0.012     
+SCS_24h_Type_II_1in	          	1:40      	0.0108    
+SCS_24h_Type_II_1in	          	1:45      	0.012     
+SCS_24h_Type_II_1in	          	1:50      	0.012     
+SCS_24h_Type_II_1in	          	1:55      	0.012     
+SCS_24h_Type_II_1in	          	2:00      	0.012     
+SCS_24h_Type_II_1in	          	2:05      	0.012     
+SCS_24h_Type_II_1in	          	2:10      	0.012     
+SCS_24h_Type_II_1in	          	2:15      	0.0132    
+SCS_24h_Type_II_1in	          	2:20      	0.012     
+SCS_24h_Type_II_1in	          	2:25      	0.012     
+SCS_24h_Type_II_1in	          	2:30      	0.0132    
+SCS_24h_Type_II_1in	          	2:35      	0.012     
+SCS_24h_Type_II_1in	          	2:40      	0.0132    
+SCS_24h_Type_II_1in	          	2:45      	0.012     
+SCS_24h_Type_II_1in	          	2:50      	0.0132    
+SCS_24h_Type_II_1in	          	2:55      	0.0132    
+SCS_24h_Type_II_1in	          	3:00      	0.0132    
+SCS_24h_Type_II_1in	          	3:05      	0.0132    
+SCS_24h_Type_II_1in	          	3:10      	0.0132    
+SCS_24h_Type_II_1in	          	3:15      	0.0132    
+SCS_24h_Type_II_1in	          	3:20      	0.0132    
+SCS_24h_Type_II_1in	          	3:25      	0.0132    
+SCS_24h_Type_II_1in	          	3:30      	0.0144    
+SCS_24h_Type_II_1in	          	3:35      	0.0132    
+SCS_24h_Type_II_1in	          	3:40      	0.0132    
+SCS_24h_Type_II_1in	          	3:45      	0.0144    
+SCS_24h_Type_II_1in	          	3:50      	0.0132    
+SCS_24h_Type_II_1in	          	3:55      	0.0144    
+SCS_24h_Type_II_1in	          	4:00      	0.0144    
+SCS_24h_Type_II_1in	          	4:05      	0.0144    
+SCS_24h_Type_II_1in	          	4:10      	0.0144    
+SCS_24h_Type_II_1in	          	4:15      	0.0144    
+SCS_24h_Type_II_1in	          	4:20      	0.0144    
+SCS_24h_Type_II_1in	          	4:25      	0.0156    
+SCS_24h_Type_II_1in	          	4:30      	0.0144    
+SCS_24h_Type_II_1in	          	4:35      	0.0156    
+SCS_24h_Type_II_1in	          	4:40      	0.0156    
+SCS_24h_Type_II_1in	          	4:45      	0.0156    
+SCS_24h_Type_II_1in	          	4:50      	0.0156    
+SCS_24h_Type_II_1in	          	4:55      	0.0156    
+SCS_24h_Type_II_1in	          	5:00      	0.0156    
+SCS_24h_Type_II_1in	          	5:05      	0.0168    
+SCS_24h_Type_II_1in	          	5:10      	0.0168    
+SCS_24h_Type_II_1in	          	5:15      	0.0156    
+SCS_24h_Type_II_1in	          	5:20      	0.0168    
+SCS_24h_Type_II_1in	          	5:25      	0.0168    
+SCS_24h_Type_II_1in	          	5:30      	0.018     
+SCS_24h_Type_II_1in	          	5:35      	0.0168    
+SCS_24h_Type_II_1in	          	5:40      	0.018     
+SCS_24h_Type_II_1in	          	5:45      	0.0168    
+SCS_24h_Type_II_1in	          	5:50      	0.018     
+SCS_24h_Type_II_1in	          	5:55      	0.018     
+SCS_24h_Type_II_1in	          	6:00      	0.018     
+SCS_24h_Type_II_1in	          	6:05      	0.018     
+SCS_24h_Type_II_1in	          	6:10      	0.0192    
+SCS_24h_Type_II_1in	          	6:15      	0.018     
+SCS_24h_Type_II_1in	          	6:20      	0.0192    
+SCS_24h_Type_II_1in	          	6:25      	0.018     
+SCS_24h_Type_II_1in	          	6:30      	0.0192    
+SCS_24h_Type_II_1in	          	6:35      	0.0204    
+SCS_24h_Type_II_1in	          	6:40      	0.0192    
+SCS_24h_Type_II_1in	          	6:45      	0.0192    
+SCS_24h_Type_II_1in	          	6:50      	0.0192    
+SCS_24h_Type_II_1in	          	6:55      	0.0204    
+SCS_24h_Type_II_1in	          	7:00      	0.0204    
+SCS_24h_Type_II_1in	          	7:05      	0.0204    
+SCS_24h_Type_II_1in	          	7:10      	0.0204    
+SCS_24h_Type_II_1in	          	7:15      	0.0204    
+SCS_24h_Type_II_1in	          	7:20      	0.0204    
+SCS_24h_Type_II_1in	          	7:25      	0.0216    
+SCS_24h_Type_II_1in	          	7:30      	0.0204    
+SCS_24h_Type_II_1in	          	7:35      	0.0216    
+SCS_24h_Type_II_1in	          	7:40      	0.0216    
+SCS_24h_Type_II_1in	          	7:45      	0.0216    
+SCS_24h_Type_II_1in	          	7:50      	0.0216    
+SCS_24h_Type_II_1in	          	7:55      	0.0216    
+SCS_24h_Type_II_1in	          	8:00      	0.0228    
+SCS_24h_Type_II_1in	          	8:05      	0.0228    
+SCS_24h_Type_II_1in	          	8:10      	0.024     
+SCS_24h_Type_II_1in	          	8:15      	0.0252    
+SCS_24h_Type_II_1in	          	8:20      	0.0252    
+SCS_24h_Type_II_1in	          	8:25      	0.0264    
+SCS_24h_Type_II_1in	          	8:30      	0.0276    
+SCS_24h_Type_II_1in	          	8:35      	0.0288    
+SCS_24h_Type_II_1in	          	8:40      	0.0288    
+SCS_24h_Type_II_1in	          	8:45      	0.03      
+SCS_24h_Type_II_1in	          	8:50      	0.0312    
+SCS_24h_Type_II_1in	          	8:55      	0.0312    
+SCS_24h_Type_II_1in	          	9:00      	0.0324    
+SCS_24h_Type_II_1in	          	9:05      	0.0312    
+SCS_24h_Type_II_1in	          	9:10      	0.0324    
+SCS_24h_Type_II_1in	          	9:15      	0.0324    
+SCS_24h_Type_II_1in	          	9:20      	0.0312    
+SCS_24h_Type_II_1in	          	9:25      	0.0324    
+SCS_24h_Type_II_1in	          	9:30      	0.0324    
+SCS_24h_Type_II_1in	          	9:35      	0.0348    
+SCS_24h_Type_II_1in	          	9:40      	0.0348    
+SCS_24h_Type_II_1in	          	9:45      	0.0372    
+SCS_24h_Type_II_1in	          	9:50      	0.0372    
+SCS_24h_Type_II_1in	          	9:55      	0.0396    
+SCS_24h_Type_II_1in	          	10:00     	0.0408    
+SCS_24h_Type_II_1in	          	10:05     	0.0432    
+SCS_24h_Type_II_1in	          	10:10     	0.0456    
+SCS_24h_Type_II_1in	          	10:15     	0.0468    
+SCS_24h_Type_II_1in	          	10:20     	0.0492    
+SCS_24h_Type_II_1in	          	10:25     	0.0504    
+SCS_24h_Type_II_1in	          	10:30     	0.054     
+SCS_24h_Type_II_1in	          	10:35     	0.0576    
+SCS_24h_Type_II_1in	          	10:40     	0.06      
+SCS_24h_Type_II_1in	          	10:45     	0.0636    
+SCS_24h_Type_II_1in	          	10:50     	0.0672    
+SCS_24h_Type_II_1in	          	10:55     	0.0696    
+SCS_24h_Type_II_1in	          	11:00     	0.0768    
+SCS_24h_Type_II_1in	          	11:05     	0.084     
+SCS_24h_Type_II_1in	          	11:10     	0.0924    
+SCS_24h_Type_II_1in	          	11:15     	0.0996    
+SCS_24h_Type_II_1in	          	11:20     	0.108     
+SCS_24h_Type_II_1in	          	11:25     	0.115     
+SCS_24h_Type_II_1in	          	11:30     	0.239     
+SCS_24h_Type_II_1in	          	11:35     	0.427     
+SCS_24h_Type_II_1in	          	11:40     	0.649     
+SCS_24h_Type_II_1in	          	11:45     	1.007     
+SCS_24h_Type_II_1in	          	11:50     	1.286     
+SCS_24h_Type_II_1in	          	11:55     	0.952     
+SCS_24h_Type_II_1in	          	12:00     	0.19      
+SCS_24h_Type_II_1in	          	12:05     	0.172     
+SCS_24h_Type_II_1in	          	12:10     	0.152     
+SCS_24h_Type_II_1in	          	12:15     	0.136     
+SCS_24h_Type_II_1in	          	12:20     	0.116     
+SCS_24h_Type_II_1in	          	12:25     	0.0984    
+SCS_24h_Type_II_1in	          	12:30     	0.084     
+SCS_24h_Type_II_1in	          	12:35     	0.0804    
+SCS_24h_Type_II_1in	          	12:40     	0.0768    
+SCS_24h_Type_II_1in	          	12:45     	0.0708    
+SCS_24h_Type_II_1in	          	12:50     	0.0684    
+SCS_24h_Type_II_1in	          	12:55     	0.0636    
+SCS_24h_Type_II_1in	          	13:00     	0.06      
+SCS_24h_Type_II_1in	          	13:05     	0.0576    
+SCS_24h_Type_II_1in	          	13:10     	0.054     
+SCS_24h_Type_II_1in	          	13:15     	0.054     
+SCS_24h_Type_II_1in	          	13:20     	0.0504    
+SCS_24h_Type_II_1in	          	13:25     	0.048     
+SCS_24h_Type_II_1in	          	13:30     	0.0456    
+SCS_24h_Type_II_1in	          	13:35     	0.0444    
+SCS_24h_Type_II_1in	          	13:40     	0.0432    
+SCS_24h_Type_II_1in	          	13:45     	0.0408    
+SCS_24h_Type_II_1in	          	13:50     	0.0396    
+SCS_24h_Type_II_1in	          	13:55     	0.0384    
+SCS_24h_Type_II_1in	          	14:00     	0.0372    
+SCS_24h_Type_II_1in	          	14:05     	0.036     
+SCS_24h_Type_II_1in	          	14:10     	0.0348    
+SCS_24h_Type_II_1in	          	14:15     	0.0348    
+SCS_24h_Type_II_1in	          	14:20     	0.0348    
+SCS_24h_Type_II_1in	          	14:25     	0.0336    
+SCS_24h_Type_II_1in	          	14:30     	0.0336    
+SCS_24h_Type_II_1in	          	14:35     	0.0324    
+SCS_24h_Type_II_1in	          	14:40     	0.0324    
+SCS_24h_Type_II_1in	          	14:45     	0.0312    
+SCS_24h_Type_II_1in	          	14:50     	0.0312    
+SCS_24h_Type_II_1in	          	14:55     	0.03      
+SCS_24h_Type_II_1in	          	15:00     	0.03      
+SCS_24h_Type_II_1in	          	15:05     	0.0288    
+SCS_24h_Type_II_1in	          	15:10     	0.0288    
+SCS_24h_Type_II_1in	          	15:15     	0.0276    
+SCS_24h_Type_II_1in	          	15:20     	0.0276    
+SCS_24h_Type_II_1in	          	15:25     	0.0264    
+SCS_24h_Type_II_1in	          	15:30     	0.0264    
+SCS_24h_Type_II_1in	          	15:35     	0.0252    
+SCS_24h_Type_II_1in	          	15:40     	0.0252    
+SCS_24h_Type_II_1in	          	15:45     	0.0252    
+SCS_24h_Type_II_1in	          	15:50     	0.024     
+SCS_24h_Type_II_1in	          	15:55     	0.0228    
+SCS_24h_Type_II_1in	          	16:00     	0.0228    
+SCS_24h_Type_II_1in	          	16:05     	0.0228    
+SCS_24h_Type_II_1in	          	16:10     	0.0228    
+SCS_24h_Type_II_1in	          	16:15     	0.0216    
+SCS_24h_Type_II_1in	          	16:20     	0.0228    
+SCS_24h_Type_II_1in	          	16:25     	0.0216    
+SCS_24h_Type_II_1in	          	16:30     	0.0216    
+SCS_24h_Type_II_1in	          	16:35     	0.0216    
+SCS_24h_Type_II_1in	          	16:40     	0.0204    
+SCS_24h_Type_II_1in	          	16:45     	0.0216    
+SCS_24h_Type_II_1in	          	16:50     	0.0204    
+SCS_24h_Type_II_1in	          	16:55     	0.0216    
+SCS_24h_Type_II_1in	          	17:00     	0.0204    
+SCS_24h_Type_II_1in	          	17:05     	0.0192    
+SCS_24h_Type_II_1in	          	17:10     	0.0204    
+SCS_24h_Type_II_1in	          	17:15     	0.0192    
+SCS_24h_Type_II_1in	          	17:20     	0.0204    
+SCS_24h_Type_II_1in	          	17:25     	0.0192    
+SCS_24h_Type_II_1in	          	17:30     	0.0192    
+SCS_24h_Type_II_1in	          	17:35     	0.0192    
+SCS_24h_Type_II_1in	          	17:40     	0.018     
+SCS_24h_Type_II_1in	          	17:45     	0.0192    
+SCS_24h_Type_II_1in	          	17:50     	0.018     
+SCS_24h_Type_II_1in	          	17:55     	0.018     
+SCS_24h_Type_II_1in	          	18:00     	0.018     
+SCS_24h_Type_II_1in	          	18:05     	0.018     
+SCS_24h_Type_II_1in	          	18:10     	0.0168    
+SCS_24h_Type_II_1in	          	18:15     	0.018     
+SCS_24h_Type_II_1in	          	18:20     	0.0168    
+SCS_24h_Type_II_1in	          	18:25     	0.0168    
+SCS_24h_Type_II_1in	          	18:30     	0.0168    
+SCS_24h_Type_II_1in	          	18:35     	0.0156    
+SCS_24h_Type_II_1in	          	18:40     	0.0168    
+SCS_24h_Type_II_1in	          	18:45     	0.0156    
+SCS_24h_Type_II_1in	          	18:50     	0.0168    
+SCS_24h_Type_II_1in	          	18:55     	0.0144    
+SCS_24h_Type_II_1in	          	19:00     	0.0156    
+SCS_24h_Type_II_1in	          	19:05     	0.0156    
+SCS_24h_Type_II_1in	          	19:10     	0.0156    
+SCS_24h_Type_II_1in	          	19:15     	0.0144    
+SCS_24h_Type_II_1in	          	19:20     	0.0144    
+SCS_24h_Type_II_1in	          	19:25     	0.0144    
+SCS_24h_Type_II_1in	          	19:30     	0.0144    
+SCS_24h_Type_II_1in	          	19:35     	0.0132    
+SCS_24h_Type_II_1in	          	19:40     	0.0144    
+SCS_24h_Type_II_1in	          	19:45     	0.0132    
+SCS_24h_Type_II_1in	          	19:50     	0.0132    
+SCS_24h_Type_II_1in	          	19:55     	0.0132    
+SCS_24h_Type_II_1in	          	20:00     	0.0132    
+SCS_24h_Type_II_1in	          	20:05     	0.0132    
+SCS_24h_Type_II_1in	          	20:10     	0.012     
+SCS_24h_Type_II_1in	          	20:15     	0.0132    
+SCS_24h_Type_II_1in	          	20:20     	0.0132    
+SCS_24h_Type_II_1in	          	20:25     	0.012     
+SCS_24h_Type_II_1in	          	20:30     	0.0132    
+SCS_24h_Type_II_1in	          	20:35     	0.0132    
+SCS_24h_Type_II_1in	          	20:40     	0.012     
+SCS_24h_Type_II_1in	          	20:45     	0.0132    
+SCS_24h_Type_II_1in	          	20:50     	0.012     
+SCS_24h_Type_II_1in	          	20:55     	0.012     
+SCS_24h_Type_II_1in	          	21:00     	0.0132    
+SCS_24h_Type_II_1in	          	21:05     	0.012     
+SCS_24h_Type_II_1in	          	21:10     	0.0132    
+SCS_24h_Type_II_1in	          	21:15     	0.012     
+SCS_24h_Type_II_1in	          	21:20     	0.012     
+SCS_24h_Type_II_1in	          	21:25     	0.012     
+SCS_24h_Type_II_1in	          	21:30     	0.0132    
+SCS_24h_Type_II_1in	          	21:35     	0.012     
+SCS_24h_Type_II_1in	          	21:40     	0.012     
+SCS_24h_Type_II_1in	          	21:45     	0.012     
+SCS_24h_Type_II_1in	          	21:50     	0.012     
+SCS_24h_Type_II_1in	          	21:55     	0.012     
+SCS_24h_Type_II_1in	          	22:00     	0.012     
+SCS_24h_Type_II_1in	          	22:05     	0.012     
+SCS_24h_Type_II_1in	          	22:10     	0.012     
+SCS_24h_Type_II_1in	          	22:15     	0.012     
+SCS_24h_Type_II_1in	          	22:20     	0.012     
+SCS_24h_Type_II_1in	          	22:25     	0.0108    
+SCS_24h_Type_II_1in	          	22:30     	0.012     
+SCS_24h_Type_II_1in	          	22:35     	0.012     
+SCS_24h_Type_II_1in	          	22:40     	0.012     
+SCS_24h_Type_II_1in	          	22:45     	0.0108    
+SCS_24h_Type_II_1in	          	22:50     	0.012     
+SCS_24h_Type_II_1in	          	22:55     	0.0108    
+SCS_24h_Type_II_1in	          	23:00     	0.012     
+SCS_24h_Type_II_1in	          	23:05     	0.012     
+SCS_24h_Type_II_1in	          	23:10     	0.0108    
+SCS_24h_Type_II_1in	          	23:15     	0.012     
+SCS_24h_Type_II_1in	          	23:20     	0.0108    
+SCS_24h_Type_II_1in	          	23:25     	0.0108    
+SCS_24h_Type_II_1in	          	23:30     	0.012     
+SCS_24h_Type_II_1in	          	23:35     	0.0108    
+SCS_24h_Type_II_1in	          	23:40     	0.0108    
+SCS_24h_Type_II_1in	          	23:45     	0.012     
+SCS_24h_Type_II_1in	          	23:50     	0.0108    
+SCS_24h_Type_II_1in	          	23:55     	0.0108    
+SCS_24h_Type_II_1in	          	24:00     	0         
+
+;SCS_24h_Type_II_2in design storm, total rainfall = 2 in, rain interval = 5 minutes, rain units = in/hr.
+SCS_24h_Type_II_2in	          	0:00      	0.0192    
+SCS_24h_Type_II_2in	          	0:05      	0.0216    
+SCS_24h_Type_II_2in	          	0:10      	0.0192    
+SCS_24h_Type_II_2in	          	0:15      	0.0216    
+SCS_24h_Type_II_2in	          	0:20      	0.0216    
+SCS_24h_Type_II_2in	          	0:25      	0.0192    
+SCS_24h_Type_II_2in	          	0:30      	0.0216    
+SCS_24h_Type_II_2in	          	0:35      	0.0216    
+SCS_24h_Type_II_2in	          	0:40      	0.0216    
+SCS_24h_Type_II_2in	          	0:45      	0.0216    
+SCS_24h_Type_II_2in	          	0:50      	0.0216    
+SCS_24h_Type_II_2in	          	0:55      	0.0216    
+SCS_24h_Type_II_2in	          	1:00      	0.0216    
+SCS_24h_Type_II_2in	          	1:05      	0.024     
+SCS_24h_Type_II_2in	          	1:10      	0.0216    
+SCS_24h_Type_II_2in	          	1:15      	0.0216    
+SCS_24h_Type_II_2in	          	1:20      	0.024     
+SCS_24h_Type_II_2in	          	1:25      	0.0216    
+SCS_24h_Type_II_2in	          	1:30      	0.024     
+SCS_24h_Type_II_2in	          	1:35      	0.024     
+SCS_24h_Type_II_2in	          	1:40      	0.0216    
+SCS_24h_Type_II_2in	          	1:45      	0.024     
+SCS_24h_Type_II_2in	          	1:50      	0.024     
+SCS_24h_Type_II_2in	          	1:55      	0.024     
+SCS_24h_Type_II_2in	          	2:00      	0.024     
+SCS_24h_Type_II_2in	          	2:05      	0.024     
+SCS_24h_Type_II_2in	          	2:10      	0.024     
+SCS_24h_Type_II_2in	          	2:15      	0.0264    
+SCS_24h_Type_II_2in	          	2:20      	0.024     
+SCS_24h_Type_II_2in	          	2:25      	0.024     
+SCS_24h_Type_II_2in	          	2:30      	0.0264    
+SCS_24h_Type_II_2in	          	2:35      	0.024     
+SCS_24h_Type_II_2in	          	2:40      	0.0264    
+SCS_24h_Type_II_2in	          	2:45      	0.024     
+SCS_24h_Type_II_2in	          	2:50      	0.0264    
+SCS_24h_Type_II_2in	          	2:55      	0.0264    
+SCS_24h_Type_II_2in	          	3:00      	0.0264    
+SCS_24h_Type_II_2in	          	3:05      	0.0264    
+SCS_24h_Type_II_2in	          	3:10      	0.0264    
+SCS_24h_Type_II_2in	          	3:15      	0.0264    
+SCS_24h_Type_II_2in	          	3:20      	0.0264    
+SCS_24h_Type_II_2in	          	3:25      	0.0264    
+SCS_24h_Type_II_2in	          	3:30      	0.0288    
+SCS_24h_Type_II_2in	          	3:35      	0.0264    
+SCS_24h_Type_II_2in	          	3:40      	0.0264    
+SCS_24h_Type_II_2in	          	3:45      	0.0288    
+SCS_24h_Type_II_2in	          	3:50      	0.0264    
+SCS_24h_Type_II_2in	          	3:55      	0.0288    
+SCS_24h_Type_II_2in	          	4:00      	0.0288    
+SCS_24h_Type_II_2in	          	4:05      	0.0288    
+SCS_24h_Type_II_2in	          	4:10      	0.0288    
+SCS_24h_Type_II_2in	          	4:15      	0.0288    
+SCS_24h_Type_II_2in	          	4:20      	0.0288    
+SCS_24h_Type_II_2in	          	4:25      	0.0312    
+SCS_24h_Type_II_2in	          	4:30      	0.0288    
+SCS_24h_Type_II_2in	          	4:35      	0.0312    
+SCS_24h_Type_II_2in	          	4:40      	0.0312    
+SCS_24h_Type_II_2in	          	4:45      	0.0312    
+SCS_24h_Type_II_2in	          	4:50      	0.0312    
+SCS_24h_Type_II_2in	          	4:55      	0.0312    
+SCS_24h_Type_II_2in	          	5:00      	0.0312    
+SCS_24h_Type_II_2in	          	5:05      	0.0336    
+SCS_24h_Type_II_2in	          	5:10      	0.0336    
+SCS_24h_Type_II_2in	          	5:15      	0.0312    
+SCS_24h_Type_II_2in	          	5:20      	0.0336    
+SCS_24h_Type_II_2in	          	5:25      	0.0336    
+SCS_24h_Type_II_2in	          	5:30      	0.036     
+SCS_24h_Type_II_2in	          	5:35      	0.0336    
+SCS_24h_Type_II_2in	          	5:40      	0.036     
+SCS_24h_Type_II_2in	          	5:45      	0.0336    
+SCS_24h_Type_II_2in	          	5:50      	0.036     
+SCS_24h_Type_II_2in	          	5:55      	0.036     
+SCS_24h_Type_II_2in	          	6:00      	0.036     
+SCS_24h_Type_II_2in	          	6:05      	0.036     
+SCS_24h_Type_II_2in	          	6:10      	0.0384    
+SCS_24h_Type_II_2in	          	6:15      	0.036     
+SCS_24h_Type_II_2in	          	6:20      	0.0384    
+SCS_24h_Type_II_2in	          	6:25      	0.036     
+SCS_24h_Type_II_2in	          	6:30      	0.0384    
+SCS_24h_Type_II_2in	          	6:35      	0.0408    
+SCS_24h_Type_II_2in	          	6:40      	0.0384    
+SCS_24h_Type_II_2in	          	6:45      	0.0384    
+SCS_24h_Type_II_2in	          	6:50      	0.0384    
+SCS_24h_Type_II_2in	          	6:55      	0.0408    
+SCS_24h_Type_II_2in	          	7:00      	0.0408    
+SCS_24h_Type_II_2in	          	7:05      	0.0408    
+SCS_24h_Type_II_2in	          	7:10      	0.0408    
+SCS_24h_Type_II_2in	          	7:15      	0.0408    
+SCS_24h_Type_II_2in	          	7:20      	0.0408    
+SCS_24h_Type_II_2in	          	7:25      	0.0432    
+SCS_24h_Type_II_2in	          	7:30      	0.0408    
+SCS_24h_Type_II_2in	          	7:35      	0.0432    
+SCS_24h_Type_II_2in	          	7:40      	0.0432    
+SCS_24h_Type_II_2in	          	7:45      	0.0432    
+SCS_24h_Type_II_2in	          	7:50      	0.0432    
+SCS_24h_Type_II_2in	          	7:55      	0.0432    
+SCS_24h_Type_II_2in	          	8:00      	0.0456    
+SCS_24h_Type_II_2in	          	8:05      	0.0456    
+SCS_24h_Type_II_2in	          	8:10      	0.048     
+SCS_24h_Type_II_2in	          	8:15      	0.0504    
+SCS_24h_Type_II_2in	          	8:20      	0.0504    
+SCS_24h_Type_II_2in	          	8:25      	0.0528    
+SCS_24h_Type_II_2in	          	8:30      	0.0552    
+SCS_24h_Type_II_2in	          	8:35      	0.0576    
+SCS_24h_Type_II_2in	          	8:40      	0.0576    
+SCS_24h_Type_II_2in	          	8:45      	0.06      
+SCS_24h_Type_II_2in	          	8:50      	0.0624    
+SCS_24h_Type_II_2in	          	8:55      	0.0624    
+SCS_24h_Type_II_2in	          	9:00      	0.0648    
+SCS_24h_Type_II_2in	          	9:05      	0.0624    
+SCS_24h_Type_II_2in	          	9:10      	0.0648    
+SCS_24h_Type_II_2in	          	9:15      	0.0648    
+SCS_24h_Type_II_2in	          	9:20      	0.0624    
+SCS_24h_Type_II_2in	          	9:25      	0.0648    
+SCS_24h_Type_II_2in	          	9:30      	0.0648    
+SCS_24h_Type_II_2in	          	9:35      	0.0696    
+SCS_24h_Type_II_2in	          	9:40      	0.0696    
+SCS_24h_Type_II_2in	          	9:45      	0.0744    
+SCS_24h_Type_II_2in	          	9:50      	0.0744    
+SCS_24h_Type_II_2in	          	9:55      	0.0792    
+SCS_24h_Type_II_2in	          	10:00     	0.0816    
+SCS_24h_Type_II_2in	          	10:05     	0.0864    
+SCS_24h_Type_II_2in	          	10:10     	0.0912    
+SCS_24h_Type_II_2in	          	10:15     	0.0936    
+SCS_24h_Type_II_2in	          	10:20     	0.0984    
+SCS_24h_Type_II_2in	          	10:25     	0.101     
+SCS_24h_Type_II_2in	          	10:30     	0.108     
+SCS_24h_Type_II_2in	          	10:35     	0.115     
+SCS_24h_Type_II_2in	          	10:40     	0.12      
+SCS_24h_Type_II_2in	          	10:45     	0.127     
+SCS_24h_Type_II_2in	          	10:50     	0.134     
+SCS_24h_Type_II_2in	          	10:55     	0.139     
+SCS_24h_Type_II_2in	          	11:00     	0.154     
+SCS_24h_Type_II_2in	          	11:05     	0.168     
+SCS_24h_Type_II_2in	          	11:10     	0.185     
+SCS_24h_Type_II_2in	          	11:15     	0.199     
+SCS_24h_Type_II_2in	          	11:20     	0.216     
+SCS_24h_Type_II_2in	          	11:25     	0.23      
+SCS_24h_Type_II_2in	          	11:30     	0.478     
+SCS_24h_Type_II_2in	          	11:35     	0.854     
+SCS_24h_Type_II_2in	          	11:40     	1.298     
+SCS_24h_Type_II_2in	          	11:45     	2.014     
+SCS_24h_Type_II_2in	          	11:50     	2.573     
+SCS_24h_Type_II_2in	          	11:55     	1.903     
+SCS_24h_Type_II_2in	          	12:00     	0.379     
+SCS_24h_Type_II_2in	          	12:05     	0.343     
+SCS_24h_Type_II_2in	          	12:10     	0.305     
+SCS_24h_Type_II_2in	          	12:15     	0.271     
+SCS_24h_Type_II_2in	          	12:20     	0.233     
+SCS_24h_Type_II_2in	          	12:25     	0.197     
+SCS_24h_Type_II_2in	          	12:30     	0.168     
+SCS_24h_Type_II_2in	          	12:35     	0.161     
+SCS_24h_Type_II_2in	          	12:40     	0.154     
+SCS_24h_Type_II_2in	          	12:45     	0.142     
+SCS_24h_Type_II_2in	          	12:50     	0.137     
+SCS_24h_Type_II_2in	          	12:55     	0.127     
+SCS_24h_Type_II_2in	          	13:00     	0.12      
+SCS_24h_Type_II_2in	          	13:05     	0.115     
+SCS_24h_Type_II_2in	          	13:10     	0.108     
+SCS_24h_Type_II_2in	          	13:15     	0.108     
+SCS_24h_Type_II_2in	          	13:20     	0.101     
+SCS_24h_Type_II_2in	          	13:25     	0.096     
+SCS_24h_Type_II_2in	          	13:30     	0.0912    
+SCS_24h_Type_II_2in	          	13:35     	0.0888    
+SCS_24h_Type_II_2in	          	13:40     	0.0864    
+SCS_24h_Type_II_2in	          	13:45     	0.0816    
+SCS_24h_Type_II_2in	          	13:50     	0.0792    
+SCS_24h_Type_II_2in	          	13:55     	0.0768    
+SCS_24h_Type_II_2in	          	14:00     	0.0744    
+SCS_24h_Type_II_2in	          	14:05     	0.072     
+SCS_24h_Type_II_2in	          	14:10     	0.0696    
+SCS_24h_Type_II_2in	          	14:15     	0.0696    
+SCS_24h_Type_II_2in	          	14:20     	0.0696    
+SCS_24h_Type_II_2in	          	14:25     	0.0672    
+SCS_24h_Type_II_2in	          	14:30     	0.0672    
+SCS_24h_Type_II_2in	          	14:35     	0.0648    
+SCS_24h_Type_II_2in	          	14:40     	0.0648    
+SCS_24h_Type_II_2in	          	14:45     	0.0624    
+SCS_24h_Type_II_2in	          	14:50     	0.0624    
+SCS_24h_Type_II_2in	          	14:55     	0.06      
+SCS_24h_Type_II_2in	          	15:00     	0.06      
+SCS_24h_Type_II_2in	          	15:05     	0.0576    
+SCS_24h_Type_II_2in	          	15:10     	0.0576    
+SCS_24h_Type_II_2in	          	15:15     	0.0552    
+SCS_24h_Type_II_2in	          	15:20     	0.0552    
+SCS_24h_Type_II_2in	          	15:25     	0.0528    
+SCS_24h_Type_II_2in	          	15:30     	0.0528    
+SCS_24h_Type_II_2in	          	15:35     	0.0504    
+SCS_24h_Type_II_2in	          	15:40     	0.0504    
+SCS_24h_Type_II_2in	          	15:45     	0.0504    
+SCS_24h_Type_II_2in	          	15:50     	0.048     
+SCS_24h_Type_II_2in	          	15:55     	0.0456    
+SCS_24h_Type_II_2in	          	16:00     	0.0456    
+SCS_24h_Type_II_2in	          	16:05     	0.0456    
+SCS_24h_Type_II_2in	          	16:10     	0.0456    
+SCS_24h_Type_II_2in	          	16:15     	0.0432    
+SCS_24h_Type_II_2in	          	16:20     	0.0456    
+SCS_24h_Type_II_2in	          	16:25     	0.0432    
+SCS_24h_Type_II_2in	          	16:30     	0.0432    
+SCS_24h_Type_II_2in	          	16:35     	0.0432    
+SCS_24h_Type_II_2in	          	16:40     	0.0408    
+SCS_24h_Type_II_2in	          	16:45     	0.0432    
+SCS_24h_Type_II_2in	          	16:50     	0.0408    
+SCS_24h_Type_II_2in	          	16:55     	0.0432    
+SCS_24h_Type_II_2in	          	17:00     	0.0408    
+SCS_24h_Type_II_2in	          	17:05     	0.0384    
+SCS_24h_Type_II_2in	          	17:10     	0.0408    
+SCS_24h_Type_II_2in	          	17:15     	0.0384    
+SCS_24h_Type_II_2in	          	17:20     	0.0408    
+SCS_24h_Type_II_2in	          	17:25     	0.0384    
+SCS_24h_Type_II_2in	          	17:30     	0.0384    
+SCS_24h_Type_II_2in	          	17:35     	0.0384    
+SCS_24h_Type_II_2in	          	17:40     	0.036     
+SCS_24h_Type_II_2in	          	17:45     	0.0384    
+SCS_24h_Type_II_2in	          	17:50     	0.036     
+SCS_24h_Type_II_2in	          	17:55     	0.036     
+SCS_24h_Type_II_2in	          	18:00     	0.036     
+SCS_24h_Type_II_2in	          	18:05     	0.036     
+SCS_24h_Type_II_2in	          	18:10     	0.0336    
+SCS_24h_Type_II_2in	          	18:15     	0.036     
+SCS_24h_Type_II_2in	          	18:20     	0.0336    
+SCS_24h_Type_II_2in	          	18:25     	0.0336    
+SCS_24h_Type_II_2in	          	18:30     	0.0336    
+SCS_24h_Type_II_2in	          	18:35     	0.0312    
+SCS_24h_Type_II_2in	          	18:40     	0.0336    
+SCS_24h_Type_II_2in	          	18:45     	0.0312    
+SCS_24h_Type_II_2in	          	18:50     	0.0336    
+SCS_24h_Type_II_2in	          	18:55     	0.0288    
+SCS_24h_Type_II_2in	          	19:00     	0.0312    
+SCS_24h_Type_II_2in	          	19:05     	0.0312    
+SCS_24h_Type_II_2in	          	19:10     	0.0312    
+SCS_24h_Type_II_2in	          	19:15     	0.0288    
+SCS_24h_Type_II_2in	          	19:20     	0.0288    
+SCS_24h_Type_II_2in	          	19:25     	0.0288    
+SCS_24h_Type_II_2in	          	19:30     	0.0288    
+SCS_24h_Type_II_2in	          	19:35     	0.0264    
+SCS_24h_Type_II_2in	          	19:40     	0.0288    
+SCS_24h_Type_II_2in	          	19:45     	0.0264    
+SCS_24h_Type_II_2in	          	19:50     	0.0264    
+SCS_24h_Type_II_2in	          	19:55     	0.0264    
+SCS_24h_Type_II_2in	          	20:00     	0.0264    
+SCS_24h_Type_II_2in	          	20:05     	0.0264    
+SCS_24h_Type_II_2in	          	20:10     	0.024     
+SCS_24h_Type_II_2in	          	20:15     	0.0264    
+SCS_24h_Type_II_2in	          	20:20     	0.0264    
+SCS_24h_Type_II_2in	          	20:25     	0.024     
+SCS_24h_Type_II_2in	          	20:30     	0.0264    
+SCS_24h_Type_II_2in	          	20:35     	0.0264    
+SCS_24h_Type_II_2in	          	20:40     	0.024     
+SCS_24h_Type_II_2in	          	20:45     	0.0264    
+SCS_24h_Type_II_2in	          	20:50     	0.024     
+SCS_24h_Type_II_2in	          	20:55     	0.024     
+SCS_24h_Type_II_2in	          	21:00     	0.0264    
+SCS_24h_Type_II_2in	          	21:05     	0.024     
+SCS_24h_Type_II_2in	          	21:10     	0.0264    
+SCS_24h_Type_II_2in	          	21:15     	0.024     
+SCS_24h_Type_II_2in	          	21:20     	0.024     
+SCS_24h_Type_II_2in	          	21:25     	0.024     
+SCS_24h_Type_II_2in	          	21:30     	0.0264    
+SCS_24h_Type_II_2in	          	21:35     	0.024     
+SCS_24h_Type_II_2in	          	21:40     	0.024     
+SCS_24h_Type_II_2in	          	21:45     	0.024     
+SCS_24h_Type_II_2in	          	21:50     	0.024     
+SCS_24h_Type_II_2in	          	21:55     	0.024     
+SCS_24h_Type_II_2in	          	22:00     	0.024     
+SCS_24h_Type_II_2in	          	22:05     	0.024     
+SCS_24h_Type_II_2in	          	22:10     	0.024     
+SCS_24h_Type_II_2in	          	22:15     	0.024     
+SCS_24h_Type_II_2in	          	22:20     	0.024     
+SCS_24h_Type_II_2in	          	22:25     	0.0216    
+SCS_24h_Type_II_2in	          	22:30     	0.024     
+SCS_24h_Type_II_2in	          	22:35     	0.024     
+SCS_24h_Type_II_2in	          	22:40     	0.024     
+SCS_24h_Type_II_2in	          	22:45     	0.0216    
+SCS_24h_Type_II_2in	          	22:50     	0.024     
+SCS_24h_Type_II_2in	          	22:55     	0.0216    
+SCS_24h_Type_II_2in	          	23:00     	0.024     
+SCS_24h_Type_II_2in	          	23:05     	0.024     
+SCS_24h_Type_II_2in	          	23:10     	0.0216    
+SCS_24h_Type_II_2in	          	23:15     	0.024     
+SCS_24h_Type_II_2in	          	23:20     	0.0216    
+SCS_24h_Type_II_2in	          	23:25     	0.0216    
+SCS_24h_Type_II_2in	          	23:30     	0.024     
+SCS_24h_Type_II_2in	          	23:35     	0.0216    
+SCS_24h_Type_II_2in	          	23:40     	0.0216    
+SCS_24h_Type_II_2in	          	23:45     	0.024     
+SCS_24h_Type_II_2in	          	23:50     	0.0216    
+SCS_24h_Type_II_2in	          	23:55     	0.0216    
+SCS_24h_Type_II_2in	          	24:00     	0         
+
+TS1             	          	0         	0         
+TS1             	          	1         	5         
+TS1             	          	2         	6         
+TS1             	          	3         	7         
+TS1             	          	4         	10        
+TS1             	          	5         	12        
+TS1             	          	6         	14        
+TS1             	          	7         	12        
+TS1             	          	8         	11        
+TS1             	          	9         	10        
+TS1             	          	10        	9         
+TS1             	          	11        	8         
+
+[REPORT]
+INPUT     	NO
+CONTROLS  	NO
+SUBCATCHMENTS	ALL
+NODES	ALL
+LINKS	ALL
+
+[TAGS]
+
+[MAP]
+DIMENSIONS      	-2074.46416070904	3037.38772874319	7509.8742938089 	8668.71776476488
+UNITS           	None
+
+[COORDINATES]
+;;Node          	X-Coord         	Y-Coord         
+;;--------------	----------------	----------------
+J1              	90.275          	6619.241        
+J2              	5358.813        	6600.401        
+J3              	2774.968        	5345.925        
+Out1            	2757.862        	3293.357        
+S1              	98.031          	7023.9          
+S2              	5348.26         	6974.276        
+S3              	2758.937        	3576.131        
+
+[VERTICES]
+;;Link          	X-Coord         	Y-Coord         
+;;--------------	----------------	----------------
+
+[POLYGONS]
+;;Subcatchment  	X-Coord         	Y-Coord         
+;;--------------	----------------	----------------
+SC1             	-1638.812       	8383.6          
+SC1             	2023.446        	8403.45         
+SC1             	2024.796        	5785.257        
+SC1             	-1628.888       	5822.997        
+SC1             	-1638.812       	8383.6          
+SC2             	3410.614        	8392.899        
+SC2             	7072.873        	8412.748        
+SC2             	7074.223        	5794.555        
+SC2             	3420.539        	5832.295        
+SC2             	3410.614        	8392.899        
+
+[SYMBOLS]
+;;Gage          	X-Coord         	Y-Coord         
+;;--------------	----------------	----------------
+Gage1           	1022.82         	9022.005        
