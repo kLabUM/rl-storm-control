@@ -3,7 +3,7 @@ import copy
 import matplotlib.pyplot as plt
 import numpy as np
 from keras.models import Sequential
-from keras.layers import Dense, Activation
+from keras.layers import Dense, Activation, Dropout
 from keras.optimizers import RMSprop
 import sys
 sys.path.append('/usr/local/lib/python2.7/site-packages')
@@ -22,11 +22,11 @@ def reward(height1, height2, outflow):
     else:
         reward2 = 0.0
 
-    if outflow <= 0.25:
+    if outflow <= 0.20:
         reward_out = 10.0*outflow
     else:
-        reward_out = -outflow*12.0
-    return 1.5*reward1 + 1.5*reward2 + reward_out
+        reward_out = -outflow*10.0
+    return 1.0*reward1 + 1.0*reward2 + reward_out
 
 
 # Policy Epsilon Greedy
@@ -65,10 +65,13 @@ def build_network():
     model = Sequential()
     model.add(Dense(10, input_dim=3))
     model.add(Activation('relu'))
+    model.add(Dropout(0.2))
     model.add(Dense(10))
     model.add(Activation('relu'))
+    model.add(Dropout(0.2))
     model.add(Dense(10))
     model.add(Activation('relu'))
+    model.add(Dropout(0.2))
     model.add(Dense(101))
     model.add(Activation('linear'))
     sgd = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
@@ -104,11 +107,11 @@ action_replay_pond2 = np.zeros((1, 1))
 states_n_pond2 = np.zeros((1, 3))
 terminal_pond2 = np.zeros((1, 1))
 
-window_length = 50000
+window_length = 100000
 episode_count = 500
 time = 0
-steps = 120000
-epsilon = np.linspace(0.1, 0.0, steps+10)
+steps = 500000
+epsilon = np.linspace(0.4, 0.001, steps+10)
 
 
 #  Book Keeping
@@ -119,8 +122,9 @@ network2_loss = []
 height1_pond_mean = []
 height2_pond_mean = []
 outflow_mean = []
-model1.load_weights('pond1_4.h5')
-model2.load_weights('pond2_4.h5')
+episode_counter = 0
+#model1.load_weights('pond1_4.h5')
+#model2.load_weights('pond2_4.h5')
 
 # Simulation
 while time < steps:
@@ -157,8 +161,8 @@ while time < steps:
     observation_pond2 = np.array([[height_pond1,
                                    height_pond2,
                                    inflow_pond2]])
-
-    while episode_time < 2100:
+    episode_counter+= 1
+    while episode_time < 7200:
 
         episode_time += 1
         time += 1
@@ -314,9 +318,9 @@ while time < steps:
                        verbose=0)
         if done:
             break
-
-    model1.save_weights('pond1_5.h5')
-    model2.save_weights('pond2_5.h5')
+    if episode_counter % 10 == 0:
+        model1.save_weights('pond1_1_020.h5')
+        model2.save_weights('pond2_1_020.h5')
     rewards1_episodes.append(np.mean(reward_tracker_pond1))
     rewards2_episodes.append(np.mean(reward_tracker_pond2))
     height1_pond_mean.append(np.mean(height_pond1_tracker))

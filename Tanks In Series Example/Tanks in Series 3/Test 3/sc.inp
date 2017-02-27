@@ -12,7 +12,7 @@ START_TIME          	00:00:00
 REPORT_START_DATE   	08/12/2016
 REPORT_START_TIME   	00:00:00
 END_DATE            	08/13/2016
-END_TIME            	06:00:00
+END_TIME            	04:00:00
 SWEEP_START         	01/01
 SWEEP_END           	12/31
 DRY_DAYS            	0
@@ -39,7 +39,7 @@ LAT_FLOW_TOL        	5
 ;;Type         	Parameters
 ;;-------------	----------
 CONSTANT    	0.0
-DRY_ONLY     NO
+DRY_ONLY      NO
 
 [RAINGAGES]
 ;;                	Rain     	Time  	Snow  	Data      
@@ -53,7 +53,7 @@ SCS_24h_Type_I_2in	INTENSITY	0:01  	1.0   	TIMESERIES	SCS_24h_Type_I_2in
 ;;              	                	                	Total   	Pcnt.   	        	Pcnt.   	Curb    	Snow    
 ;;Name          	Raingage        	Outlet          	Area    	Imperv  	Width   	Slope   	Length  	Pack    
 ;;--------------	----------------	----------------	--------	--------	--------	--------	--------	--------
-SC2             	Gage1           	S5              	100     	100     	2500    	0.5     	0       	                
+SC2             	t1                S5              	100     	100     	2500    	0.5     	0       	               
 
 [SUBAREAS]
 ;;Subcatchment  	N-Imperv  	N-Perv    	S-Imperv  	S-Perv    	PctZero   	RouteTo   	PctRouted 
