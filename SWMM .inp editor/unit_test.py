@@ -76,5 +76,5 @@ if __name__ == "__main__":
 
     time = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
     intensity = ["0", "5", "6", "7", "10", "12", "14", "12", "11", "10", "9", "8", "0"]
-    storm_event('Parallel.inp', "output.inp", 'TIMESERIES',
+    storm_event('Parallel.inp', "Parallel.inp", 'TIMESERIES',
                 'T1', time, intensity)
