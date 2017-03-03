@@ -53,7 +53,7 @@ SCS_24h_Type_I_2in	INTENSITY	0:01  	1.0   	TIMESERIES	SCS_24h_Type_I_2in
 ;;              	                	                	Total   	Pcnt.   	        	Pcnt.   	Curb    	Snow    
 ;;Name          	Raingage        	Outlet          	Area    	Imperv  	Width   	Slope   	Length  	Pack    
 ;;--------------	----------------	----------------	--------	--------	--------	--------	--------	--------
-SC2             	Gage1             S5              	100     	100     	2500    	0.5     	0       	                
+SC2             	Sn                S5              	100     	100     	2500    	0.5     	0       	                
 
 [SUBAREAS]
 ;;Subcatchment  	N-Imperv  	N-Perv    	S-Imperv  	S-Perv    	PctZero   	RouteTo   	PctRouted 

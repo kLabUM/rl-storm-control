@@ -52,13 +52,13 @@ def build_network():
     model = Sequential()
     model.add(Dense(50, input_dim=3))
     model.add(Activation('relu'))
-    model.add(Dropout(0.4))
+    model.add(Dropout(0.5))
     model.add(Dense(50))
     model.add(Activation('relu'))
-    model.add(Dropout(0.4))
+    model.add(Dropout(0.5))
     model.add(Dense(50))
     model.add(Activation('relu'))
-    model.add(Dropout(0.4))
+    model.add(Dropout(0.5))
     model.add(Dense(101))
     model.add(Activation('linear'))
     sgd = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
@@ -97,9 +97,10 @@ terminal_pond2 = np.zeros((1, 1))
 window_length = 100000
 episode_count = 500
 time = 0
-steps = 500000
-epsilon = np.linspace(0.5, 0.01, steps+10)
-
+steps = 1500000
+epsilon = np.linspace(0.5, 0.0001, steps+10)
+#model1.load_weights('no_hope_p1_rogue10.h5')
+#model2.load_weights('no_hope_p2_rogue10.h5')
 
 #  Book Keeping
 rewards1_episodes = []
@@ -313,8 +314,8 @@ while time < steps:
         if done:
             break
 
-    model1.save_weights('no_hope_p1_rogue7.h5')
-    model2.save_weights('no_hope_p2.rogue7.h5')
+    model1.save_weights('no_hope_p1_rogue12.h5')
+    model2.save_weights('no_hope_p2_rogue12.h5')
     flooding_pond1.append(np.mean(flood_track1))
     flooding_pond2.append(np.mean(flood_track2))
     rewards1_episodes.append(np.mean(reward_tracker_pond1))
@@ -322,6 +323,12 @@ while time < steps:
     height1_pond_mean.append(np.mean(height_pond1_tracker))
     height2_pond_mean.append(np.mean(height_pond2_tracker))
     outflow_mean.append(np.mean(outflow_tracker))
+np.savetxt('rewards1', rewards1_episodes, delimiter=",")
+np.savetxt('rewards2', rewards2_episodes, delimiter=",")
+np.savetxt('flooding_1', flooding_pond1, delimiter=",")
+np.savetxt('flooding_2', flooding_pond2, delimiter=",")
+np.savetxt('outflow_mean', outflow_mean, delimiter=",")
+np.savetxt('outflow_tracker', outflow_tracker, delimiter=",")
 
 for layer in model1.layers:
     print layer.get_weights()
