@@ -94,6 +94,7 @@ action_replay_pond2 = np.zeros((1, 1))
 states_n_pond2 = np.zeros((1, 3))
 terminal_pond2 = np.zeros((1, 1))
 
+
 window_length = 100000
 episode_count = 500
 time = 0
