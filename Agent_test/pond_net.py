@@ -1,4 +1,6 @@
 from core_network import stacker, replay_stacker
+import numpy as np
+
 
 class pond_tracker:
     def __init__(self,
@@ -8,7 +10,7 @@ class pond_tracker:
                  replay_window):
 
         self.pond_id = pond_id
-        self.oce_id = orifice_id
+        self.orifice_id = orifice_id
         self.states = states
         self.replay_window = replay_window
 
@@ -49,18 +51,19 @@ class pond_tracker:
         self.replay_memory['terminal'].update(terminal)
 
     def tracker_update(self, N):
-        depth,inflow,outflow,flooding,gate_position = N
+        depth, inflow, outflow, flooding, gate_position, reward_value = N
         self.tracker_pond['depth'].update(depth)
         self.tracker_pond['inflow'].update(inflow)
         self.tracker_pond['outflow'].update(outflow)
         self.tracker_pond['flooding'].update(flooding)
         self.tracker_pond['gate_position'].update(gate_position)
+        self.tracker_pond['rewards'].update(reward_value)
 
     def record_mean(self):
-        self.bookkeeping['mean_rewards'] = np.mean(self.tracker_pond['rewards'])
-        self.bookkeeping['mean_depth'] = np.mean(self.tracker_pond['depth'])
-        self.bookkeeping['mean_outflow'] = np.mean(self.tracker_pond['outflow'])
-        self.bookkeeping['mean_flooding'] = np.mean(self.tracker_pond['flooding'])
+        self.bookkeeping['mean_rewards'].update(np.mean(self.tracker_pond['rewards'].data()))
+        self.bookkeeping['mean_depth'] = np.mean(self.tracker_pond['depth'].data())
+        self.bookkeeping['mean_outflow'] = np.mean(self.tracker_pond['outflow'].data())
+        self.bookkeeping['mean_flooding'] = np.mean(self.tracker_pond['flooding'].data())
 
     def forget_past(self):
         self.tracker_pond = {'depth': stacker(1),
