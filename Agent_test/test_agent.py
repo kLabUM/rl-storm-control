@@ -14,7 +14,7 @@ def pond1_states():
 
 def pond2_states():
     hp1 = swmm.get('S5', swmm.DEPTH, swmm.SI)
-    hp2 = swmm.get('S7', swmm.DEPTH, swmm.SI)
+    hp2 = swmm.get('S7', swmm.DEPTH, swmm.SI)print
     ip2 = swmm.get('S7', swmm.INFLOW, swmm.SI)
     return np.array([hp1, hp2, ip2])
 

@@ -227,7 +227,7 @@ while time < steps:
 
         action_replay_pond3 = snapshots(action_replay_pond3,
                                         action_pond1,
-                                        window_length)
+                                   23     window_length)
 
         action_replay_pond4 = snapshots(action_replay_pond4,
                                         action_pond2,
