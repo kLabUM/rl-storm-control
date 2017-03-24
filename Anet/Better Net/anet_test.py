@@ -48,12 +48,12 @@ for i in controlled_nodes.keys():
     model = target = build_network(len(states_controlled[i]),
                                    len(action_space),
                                    4, 50, 'relu', 0.5)
-    model.load_weights(i+'model')
+    #model.load_weights(i+'model')
     target.set_weights(model.get_weights())
     models_ac[i] = [model, target]
 
 # Simulation Time Steps
-episode_count = 100
+episode_count = 10
 time_limit = 4970
 timesteps = episode_count*time_limit
 epsilon_value = np.linspace(0.5, 0.001, timesteps+10)
