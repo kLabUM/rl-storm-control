@@ -37,6 +37,7 @@ while not(swmm.is_over()):
 # Make plots prettier !
 sns.set(style="white")
 
+print time_steps
 fig = plt.figure(1)
 
 plt.subplot(4,2,1)
