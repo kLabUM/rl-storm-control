@@ -91,7 +91,7 @@ terminal_pond2 = np.zeros((1, 1))
 
 
 window_length = 100000
-episode_count = 1000.0
+episode_count = 100.0
 sim_time = 7200.0
 time = 0
 steps = episode_count*sim_time
@@ -246,7 +246,7 @@ while time < steps:
                                    state_step_n_pond2,
                                    window_length)
 
-        if train and episode_time % 10 == 0:
+        if train and episode_time % 25 == 0:
             indx = randombatch(32, states_pond1.shape[0])
             indx = list(map(int, indx))
             states_train = states_pond1[indx]
@@ -277,7 +277,7 @@ while time < steps:
                        nb_epoch=1,
                        verbose=0)
 
-        if train and episode_time % 5 == 0:
+        if train and episode_time % 25 == 0:
             indx = randombatch(32, states_pond2.shape[0])
             indx = list(map(int, indx))
             states_train = states_pond2[indx]
@@ -310,8 +310,8 @@ while time < steps:
         if done:
             break
 
-    model1.save_weights('tanks_series.h5')
-    model2.save_weights('tanks_series.h5')
+    model1.save_weights('tanks_series_pond1')
+    model2.save_weights('tanks_series_pond2')
     flooding_pond1.append(np.mean(flood_track1))
     flooding_pond2.append(np.mean(flood_track2))
     rewards1_episodes.append(np.mean(reward_tracker_pond1))
@@ -319,12 +319,12 @@ while time < steps:
     height1_pond_mean.append(np.mean(height_pond1_tracker))
     height2_pond_mean.append(np.mean(height_pond2_tracker))
     outflow_mean.append(np.mean(outflow_tracker))
-np.save('rewards1', rewards1_episodes)
-np.save('rewards2', rewards2_episodes)
-np.save('flooding_1', flooding_pond1)
-np.save('flooding_2', flooding_pond2)
-np.save('outflow_mean', outflow_mean)
-np.save('outflow_tracker', outflow_tracker)
+    np.save('rewards1_'+str(episode_count), rewards1_episodes)
+    np.save('rewards2'+str(episode_count),rewards2_episodes)
+    np.save('flooding_1'+str(episode_count),flooding_pond1)
+    np.save('flooding_2'+str(episode_count), flooding_pond2)
+    np.save('outflow_mean'+str(episode_count), outflow_mean)
+    np.save('outflow_tracker'+str(episode_count), outflow_tracker)
 
 
 plt.figure(1)

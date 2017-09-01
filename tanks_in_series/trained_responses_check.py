@@ -18,14 +18,11 @@ plt.rc(csfont)
 def build_network():
     """Neural Nets Action-Value Function"""
     model = Sequential()
-    model.add(Dense(10, input_dim=3))
+    model.add(Dense(50, input_dim=3))
     model.add(Activation('relu'))
-    model.add(Dense(10))
+    model.add(Dense(50))
     model.add(Activation('relu'))
-    model.add(Dense(10))
-    model.add(Activation('relu'))
-    model.add(Dense(11))
-    model.add(Activation('linear'))
+    model.add(Dense(101))
     sgd = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
     model.compile(loss='mean_squared_error', optimizer=sgd)
     return model
