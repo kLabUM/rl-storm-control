@@ -128,7 +128,7 @@ temp_acts = list(temp_acts)
 action_space = np.asarray([[-1 if j == 0 else 1 for j in i]
                            for i in temp_acts])
 # Replay Memory
-replay = replay_memory_agent(len(input_states), 100000)
+replay = replay_memory_agent(len(input_states), 1000000)
 
 # Deep Q learning agent
 prof_x = deep_q_agent(
@@ -139,7 +139,7 @@ prof_x = deep_q_agent(
     epsi_greedy)
 
 # Simulation Time Steps
-episode_count = 1  # Increase the epsiode count
+episode_count = 195  # Increase the epsiode count
 time_sim = 25000  # Update these values
 timesteps = episode_count * time_sim
 epsilon_value = np.linspace(epi_start, epi_end, episode_count + 10)
@@ -158,7 +158,6 @@ while episode_tracker < episode_count:
 
     if episode_tracker > 0:
         model.load_weights(save_model_name)
-        print "old_model_loaded"
 
     t_epsi += 1
     episode_tracker += 1
@@ -175,7 +174,7 @@ while episode_tracker < episode_count:
     reward_sim = []
     outflow_sim = []
 
-    print "episode number :", episode_count
+    print "episode number :", episode_tracker
     print "exploration :", epsilon_value[episode_tracker]
 
     while episode_timer < time_sim:
@@ -245,11 +244,9 @@ while episode_tracker < episode_count:
     rewards_episode_tracker.append(np.mean(np.asarray(reward_sim)))
     outflow_episode_tracker.append(np.mean(np.asarray(outflow_sim)))
 
-    if mean_episode_reward <= rewards_episode_tracker[len(
-            rewards_episode_tracker) - 1]:
-        mean_episode_reward = rewards_episode_tracker[len(
-            rewards_episode_tracker) - 1]
-        model.save(save_model_name)
+    #if mean_episode_reward <= rewards_episode_tracker[len(rewards_episode_tracker) - 1]:
+    #    mean_episode_reward = rewards_episode_tracker[len(rewards_episode_tracker) - 1]
+    model.save(save_model_name)
 
 np.save(save_model_name + "_rewards", rewards_episode_tracker)
 np.save(save_model_name + "_outflow", outflow_episode_tracker)
