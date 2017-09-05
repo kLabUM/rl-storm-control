@@ -92,7 +92,7 @@ _ERROR_MSG_IS_NUMERIC = TypeError("Error: This function just handle numerical at
 
 # ------------------- GLOBAL PRIVATE VARIABLES -----------------
 
-_swmmDLL = CDLL("swmm5.so") # Loads the static Lib
+_swmmDLL = CDLL("../epa_swmm/swmm5.so") # Loads the static Lib
 _swmmDLL.swmm_get.restype = c_double # Define the return type of the DLL function swmm_get
 _swmmDLL.swmm_get_from_input.restype = c_double # Define the return type of the DLL function swmm_get_from_input
 _elapsedTime = c_double(0.000001) # Elapsed time in decimal days
