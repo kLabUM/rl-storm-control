@@ -1,0 +1,2 @@
+- [ ] trained rewards 
+- [ ] final plot of controlled outflow

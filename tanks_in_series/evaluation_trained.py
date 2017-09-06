@@ -92,11 +92,11 @@ terminal_pond2 = np.zeros((1, 1))
 
 
 window_length = 100000
-episode_count = 100.0
+episode_count = 1.0
 sim_time = 7200.0
 time = 0
 steps = episode_count * sim_time
-epsilon = np.linspace(0.3, 0.0001, steps + 10)
+epsilon = np.linspace(0.0, 0.0001, steps + 10)
 
 
 #  Book Keeping
@@ -110,6 +110,10 @@ outflow_mean = []
 episode_counter = 0
 flooding_pond1 = []
 flooding_pond2 = []
+
+# Load trained weights
+model1.load_weights("tanks_series_pond1")
+model2.load_weights("tanks_series_pond2")
 
 # Simulation
 while time < steps:
@@ -131,7 +135,7 @@ while time < steps:
     flood_track2 = []
 
     done = False
-    train = True if time > 10000 else False
+    train = True #if time > 10000 else False
     loss_check_pond1 = 0
     episode_time = 0
     action_space = np.linspace(0.0, 10.0, 101)
@@ -386,3 +390,4 @@ plt.plot(flooding_pond2)
 plt.title('Flooding-pond2')
 
 plt.show()
+

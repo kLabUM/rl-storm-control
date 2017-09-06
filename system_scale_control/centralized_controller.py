@@ -139,7 +139,7 @@ prof_x = deep_q_agent(
     epsi_greedy)
 
 # Simulation Time Steps
-episode_count = 1  # Increase the epsiode count
+episode_count = 195  # Increase the epsiode count
 time_sim = 25000  # Update these values
 timesteps = episode_count * time_sim
 epsilon_value = np.linspace(epi_start, epi_end, episode_count + 10)
