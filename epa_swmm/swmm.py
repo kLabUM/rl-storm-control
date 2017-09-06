@@ -23,7 +23,7 @@ from ctypes import c_double, CDLL, c_float, pointer # Required to handle with DL
 from time import time # Required to get computational times.
 from os import remove # Required to clear info file.
 import math, re # Used to create .rpt and .out paths
-
+import os
 # ------------------------ CONSTANTS ---------------------------
 
 # Types of objects
@@ -91,8 +91,10 @@ _ERROR_MSG_INCOHERENT = TypeError("Error: Incoherent parameter")
 _ERROR_MSG_IS_NUMERIC = TypeError("Error: This function just handle numerical attributes")
 
 # ------------------- GLOBAL PRIVATE VARIABLES -----------------
-
-_swmmDLL = CDLL("../epa_swmm/swmm5.so") # Loads the static Lib
+if os.name == "posix":
+        _swmmDLL = CDLL("../epa_swmm/swmm5l.so") # Loads the static Lib
+else:
+        _swmmDLL = CDLL("../epa_swmm/swmm5.so") # Loads the static Lib
 _swmmDLL.swmm_get.restype = c_double # Define the return type of the DLL function swmm_get
 _swmmDLL.swmm_get_from_input.restype = c_double # Define the return type of the DLL function swmm_get_from_input
 _elapsedTime = c_double(0.000001) # Elapsed time in decimal days

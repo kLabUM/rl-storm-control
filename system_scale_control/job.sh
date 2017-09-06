@@ -27,3 +27,4 @@ python2 centralized_controller.py 0.0422413793103 0.0319310344828 prof_x25 prof_
 python2 centralized_controller.py 0.0319310344828 0.0216206896552 prof_x26 prof_x27
 python2 centralized_controller.py 0.0216206896552 0.0113103448276 prof_x27 prof_x28
 python2 centralized_controller.py 0.0113103448276 0.001 prof_x28 prof_x29
+rm swmm*
