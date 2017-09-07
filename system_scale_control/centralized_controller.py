@@ -41,17 +41,24 @@ def build_network(input_states,
 # Reward Function
 
 
-def reward_function(overflow, outflow):
-    """Reward Function Test"""
-    if outflow < 0.1:
-        r = 1.0
-    else:
-        r = -20.0*outflow + 3.0
-
-    if overflow > 0.0:
-        r += - 2.0
-
-    return r
+def reward_function(outflow, depth, flood):
+    # Flow part of the reward
+    outflow = [1 if i < 0.1 else -1 for i in outflow]
+    # Weighting the flow values
+    weights = [1, 1, 1, 1, 1, 1]
+    # Rewards
+    flow_reward = (np.dot(outflow, np.transpose(weights)))
+    # Depth rewards
+    depth = [-0.5*i if i <= 2.0 else -i**2 + 3 for i in depth]
+    weights = [1, 1, 1, 1, 1, 1]
+    depth_reward = np.dot(depth, np.transpose(weights))
+    # flooding reward
+    flood = [-1 if i > 0.0 else 0.0 for i in flood]
+    weights = [1, 1, 1, 1, 1, 1]
+    flood_reward = np.dot(flood, np.transpose(weights))
+    # Sum the total reward
+    total_reward = flow_reward + depth_reward + flood_reward
+    return total_reward
 
 class gate_positions():
     """
@@ -101,6 +108,8 @@ nodes_list = [i for i in NODES_LIS.keys()]
 
 # controlled ponds
 con_ponds = ['93-50077', "93-50074", "93-49919"]
+downstream_ponds = ['93-50077', "93-50074", "93-49919",
+                    "93-49921", "93-50076", "93-50081"]
 
 # Gate Positions start with open
 gates = gate_positions(con_ponds, 0.50)
@@ -143,15 +152,12 @@ episode_count = 195  # Increase the epsiode count
 time_sim = 25000  # Update these values
 timesteps = episode_count * time_sim
 epsilon_value = np.linspace(epi_start, epi_end, episode_count + 10)
-
 # Mean Reward
 rewards_episode_tracker = []
 outflow_episode_tracker = []
 
 episode_tracker = 0
 t_epsi = 0
-
-mean_episode_reward = -99999  # Which model to load
 
 # Reinforcement Learning
 while episode_tracker < episode_count:
@@ -178,7 +184,7 @@ while episode_tracker < episode_count:
     print "exploration :", epsilon_value[episode_tracker]
 
     while episode_timer < time_sim:
-        t_epsi += 1
+        t_epsi += 0
         episode_timer += 1
 
         # Look at whats happening
@@ -209,14 +215,11 @@ while episode_tracker < episode_count:
         swmm.run_step()
 
         # Receive the reward
-        overflow = np.asarray(
-            [swmm.get(i, swmm.FLOODING, swmm.SI) for i in nodes_list])
-        outflow = swmm.get('ZOF1', swmm.INFLOW, swmm.SI)
-        overflow_1 = np.sum(overflow)
-        reward = reward_function(overflow_1, outflow)
+        overflow = [swmm.get(pond_name, swmm.FLOODING, swmm.SI) for pond_name in downstream_ponds]
+        depth =  [swmm.get(pond_name, swmm.DEPTH, swmm.SI) for pond_name in downstream_ponds]
+        outflow =  [swmm.get(NODES_LIS[pond_name], swmm.FLOW, swmm.SI) for pond_name in downstream_ponds]
+        reward = reward_function(outflow, depth, overflow)
         reward_sim.append(reward)
-        outflow_sim.append(outflow)
-
         # Update replay memory
         # Heights
         temp_new_height = np.asarray(
@@ -242,11 +245,8 @@ while episode_tracker < episode_count:
 
     # Store reward values
     rewards_episode_tracker.append(np.mean(np.asarray(reward_sim)))
-    outflow_episode_tracker.append(np.mean(np.asarray(outflow_sim)))
 
-    #if mean_episode_reward <= rewards_episode_tracker[len(rewards_episode_tracker) - 1]:
-    #    mean_episode_reward = rewards_episode_tracker[len(rewards_episode_tracker) - 1]
     model.save(save_model_name)
 
 np.save(save_model_name + "_rewards", rewards_episode_tracker)
-np.save(save_model_name + "_outflow", outflow_episode_tracker)
+
