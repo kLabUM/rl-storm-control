@@ -10,7 +10,7 @@ These algorithms operate with the prime directive to maintain the flows in the n
 ![tanks_series](tanks_in_series/series_network.JPG "Tanks in series")
 ### System Scale Control
 
-![aa_network](system_scale_control/system_network.png)
+![aa_network](aa_network_controller/system_network.png)
 
 ```
 label["93-49743"] = "C1"

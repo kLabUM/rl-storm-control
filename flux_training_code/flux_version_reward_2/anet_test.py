@@ -64,8 +64,8 @@ for i in nodes_controlled.keys():
 
 # Simulation Time Steps
 episode_count = 198
-timesteps = episode_count*14000
-time_limit = 14000
+timesteps = episode_count*25000
+time_limit = 25000
 epsilon_value = np.linspace(epi_start, epi_end, timesteps+10)
 
 

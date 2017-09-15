@@ -150,7 +150,7 @@ while time_sim < timesteps:
         temp_gate = current_gate
         depth = swmm.get("93-50077", swmm.DEPTH, swmm.SI)
         floos_1  = swmm.get("93-50077", swmm.FLOODING, swmm.SI)
-        r_temp = reward_function(depth, outflow, gate_change, floos_1)
+        r_temp = 1 #reward_function(depth, outflow, gate_change, floos_1)
 
         for i in nodes_controlled.keys():
             agents_dqn[i].rewards_vector = r_temp
