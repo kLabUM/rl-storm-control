@@ -11,7 +11,24 @@ Storm water network is simulated using EPA-SWMM and pyswmm/matswmm. Matswmm has 
  
 pyswmm/matswmm makes function calls to a static c library. Hence, we advice gcc-8.0 for pyswmm and gcc-4.2 for matswmm. 
 
+## Agents
 
+There are two types of deep rl agents.
+1. Centralized controller that can observe multiple states across the network and control the ponds in the network 
+2. Localised controller that can observe the state of an individual assent and control it 
+
+To use these agents to control a storm water network, you would just need to know the ID(e.g. "1D" from the swmm input file).
+
+Refer to the example implementation for further details.
+
+## Data presented in the paper
+
+Weights of the neural network used for plots can be found in **./data**
+
+## Utilities
+
+Source code for generating heatmaps and other plots presented in the paper can be found in **./utilities**
+ 
 ## Further references 
 1. Reinforcement Learning by Sutton and Barto
 2. DQN
