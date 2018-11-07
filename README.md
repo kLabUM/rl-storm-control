@@ -12,19 +12,6 @@ These algorithms operate with the prime directive to maintain the flows in the n
 
 ![aa_network](aa_network_controller/system_network.png)
 
-```
-label["93-49743"] = "C1"
-label["93-49868"] = "A1"
-label["93-49919"] = "AB2"
-label["93-49921"] = "ABC1"
-label["93-50074"] = "C2"
-label["93-50076"] = "ABC2"
-label["93-50077"] = "ABC4"
-label["93-50081"] = "ABC3"
-label["93-50225"] = "AB1"
-label["93-90357"] = "B1"
-label["93-90358"] = "A2"
-```
 
 
 ## Uncontrolled response
