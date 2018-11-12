@@ -5,7 +5,6 @@ from keras.layers import Dense, Activation, Dropout
 from keras.optimizers import RMSprop
 import itertools
 import sys
-import swmm
 
 # Simulation parameters
 epi_start = float(sys.argv[1])

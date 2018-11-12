@@ -1,5 +1,4 @@
 import numpy as np
-#import matplotlib.pyplot as plt
 import swmm
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Dropout
@@ -69,7 +68,6 @@ def build_network(input_states,
     model.compile(loss='mean_squared_error', optimizer=sgd)
     return model
 
-"""
 def plot_network(Ponds_network, components_tracking,
                  components_bookkeeping, figure_num=1, show=True):
     rows = len(components_tracking) + len(components_bookkeeping)
@@ -95,7 +93,6 @@ def plot_network(Ponds_network, components_tracking,
     # else:
     #     return fig
 
-"""
 # SWMM Network finder
 def swmm_states(Network, state):
     temp = []
