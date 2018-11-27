@@ -42,8 +42,12 @@ Weights of the neural network used for plots can be found in **./data**
 ## Utilities
 
 Source code for generating heatmaps and other plots presented in the paper can be found in **./utilities**
- 
+
+## All the data used in the paper can be found here 
+
+https://drive.google.com/drive/folders/1PCixrjWy5TXMKn-VmIy0HpxWn4Jd2JrS?usp=sharing
+
 ## Further references 
 1. Reinforcement Learning by Sutton and Barto
 2. DQN
-3. Batch Normalization 
+3. Batch Normalization
