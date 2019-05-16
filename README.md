@@ -35,10 +35,6 @@ Refer to the example implementation for further details.
 University of Michigan's FLUX was used to train the agents. They can be run on any local computer too, but we **strongly** recommend a GPU.
 
 
-## Data presented in the paper
-
-Weights of the neural network used for plots can be found in **./data**
-
 ## Utilities
 
 Source code for generating heatmaps and other plots presented in the paper can be found in **./utilities**
